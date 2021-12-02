@@ -1,37 +1,30 @@
 import express from "express";
 import bodyParser from "body-parser";
-import mongoose from "mongoose";
 import cors from "cors";
-
+import mongoose from "mongoose";
 import postRoutes from "./routes/posts.js";
 
 const app = express();
 
-//prefix for posts
-app.use("/", postRoutes);
+var corsOptions = {
+  origin: "http://localhost:3000",
+};
 
-app.use(bodyParser.json({ limit: "30mb", extended: true }));
-app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
+app.use(cors(corsOptions));
 
-app.use(cors());
+// parse requests of content-type - application/json
+app.use(bodyParser.json());
 
-// const CONNECTION_URL =
-// "mongodb+srv://nem:nem123@cluster0.ranyp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-const PORT = process.env.PORT || 5000;
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.set("port", PORT);
-
-app.listen(PORT, () => {
-  console.log("Listening on port " + app.get("port"));
+// simple route
+app.get("/", (req, res) => {
+  res.json({ message: "Welcome to nem application." });
 });
 
-// mongoose
-//   .connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
-//   .then(() =>
-//     app.listen(PORT, () =>
-//       console.log(`Server Running on Port: http://localhost:${PORT}`)
-//     )
-//   )
-//   .catch((error) => console.log(`${error} did not connect`));
-
-// mongoose.set("useFindAndModify", false);
+// set port, listen for requests
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}.`);
+});
