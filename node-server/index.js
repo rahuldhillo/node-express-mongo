@@ -5,7 +5,7 @@ import router from "./routes/tutorial.routes.js";
 const app = express();
 
 var corsOptions = {
-  origin: "http://localhost:4200"
+  origin: "http://localhost:3000",
 };
 
 app.use(cors(corsOptions));
@@ -16,15 +16,12 @@ app.use(express.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/api/tutorials', router);
+app.use("/api/tutorials", router);
 
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to bezkoder application." });
+  res.json({ message: "Welcome to new application." });
 });
-
-
-// require("./app/routes/tutorial.routes.js")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

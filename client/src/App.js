@@ -1,23 +1,46 @@
 import React, { useState, useEffect } from "react";
-// import axios from "axios";
+import Form from "./components/forms/Form";
+import Developer from "./components/developers/Developer";
 
 const App = () => {
-  const [posts, setPosts] = useState([]);
+  const [data, setData] = useState([]);
+  const [singleData, setSingleData] = useState([]);
 
-  const fetchPost = () => {
-    fetch("https://jsonplaceholder.typicode.com/todos/1")
+  const fetchAll = () => {
+    fetch("http://localhost:8080/api/tutorials/")
       .then((response) => response.json())
-      .then((data) => setPosts(JSON.stringify(data)));
+      .then((data) => setData(JSON.stringify(data)));
   };
 
-  // useEffect(() => {
-  //   fetchPost();
-  // }, []);
+  const fetchOne = (id) => {
+    fetch(`http://localhost:8080/api/tutorials/name?id=${id}`)
+      .then((response) => response.json())
+      .then((data) => setSingleData(JSON.stringify(data)));
+  };
+
+  const insert = (data) => {
+    fetch("http://localhost:8080/api/tutorials/", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  };
+
+  const remove = (id) => {
+    fetch(`http://localhost:8080/api/tutorials/${id}`, {
+      method: "DELETE",
+    });
+  };
 
   return (
     <div>
-      <p> {posts} </p>
-      <button onClick={fetchPost}> Fetch Data </button>
+      <p> {data} </p>
+      <button onClick={fetchAll}> Fetch Data </button>
+      <Form insert={insert}></Form>
+      <Developer fetchOne={fetchOne} remove={remove}></Developer>
+      <p>{singleData}</p>
     </div>
   );
 };
