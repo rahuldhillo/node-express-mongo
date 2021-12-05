@@ -16,7 +16,7 @@ const Developer = (props) => {
   };
 
   return (
-    <div>
+    <div class="container">
       <input type="number" value={id} onChange={setIdHandler}></input>
       <button onClick={fetchHandler}>Fetch Developer</button>
       <button onClick={deleteHandler}>Delete Developer</button>

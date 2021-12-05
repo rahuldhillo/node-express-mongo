@@ -16,7 +16,7 @@ const Form = (props) => {
   };
 
   return (
-    <div>
+    <div class="container">
       <input type="text" value={title} onChange={setTitleHandler}></input>
       <input type="text" value={description} onChange={setDescHandler}></input>
       <button onClick={insertHandler}> Insert </button>
