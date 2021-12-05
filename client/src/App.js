@@ -1,32 +1,21 @@
 import React, { useState, useEffect } from "react";
 import Form from "./components/forms/Form";
 import Developer from "./components/developers/Developer";
+import EditUser from "./components/edit/EditUser";
+import Add from "./components/add/Add";
+import Remove from "./components/remove/Remove";
 
 const App = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([1, 2, 3, 4]);
   const [singleData, setSingleData] = useState([]);
+  const [userChange, setUserChanged] = useState(false);
 
-  const fetchAll = () => {
+  useEffect(() => {
     fetch("http://localhost:8080/api/tutorials/")
       .then((response) => response.json())
-      .then((data) => setData(JSON.stringify(data)));
-  };
-
-  const fetchOne = (id) => {
-    fetch(`http://localhost:8080/api/tutorials/name?id=${id}`)
-      .then((response) => response.json())
-      .then((data) => setSingleData(JSON.stringify(data)));
-  };
-
-  const insert = (data) => {
-    fetch("http://localhost:8080/api/tutorials/", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-  };
+      .then((data) => setData(data));
+    setUserChanged(false);
+  }, [userChange]);
 
   const remove = (id) => {
     fetch(`http://localhost:8080/api/tutorials/${id}`, {
@@ -35,12 +24,38 @@ const App = () => {
   };
 
   return (
-    <div>
-      <p> {data} </p>
-      <button onClick={fetchAll}> Fetch Data </button>
-      <Form insert={insert}></Form>
-      <Developer fetchOne={fetchOne} remove={remove}></Developer>
-      <p>{singleData}</p>
+    <div class="container">
+      <h1>
+        User Dashboard <Add edited={setUserChanged} />
+      </h1>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Title</th>
+            <th scope="col">Description</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((user) => {
+            return (
+              <tr key={user.id}>
+                <th scope="row">{user.id}</th>
+                <td>{user.title}</td>
+                <td>{user.description}</td>
+                <td>
+                  <EditUser user={user} edited={setUserChanged} />
+                </td>
+                <td>
+                  <Remove user={user} edited={setUserChanged} />
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 };
